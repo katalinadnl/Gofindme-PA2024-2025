@@ -1,0 +1,39 @@
+@mixin flexbox($direction, $wrap, $justify, $align, $gap: 0) {
+	display: flex;
+	flex-direction: $direction;
+	flex-wrap: $wrap;
+	justify-content: $justify;
+	align-items: $align;
+	gap: $gap;
+}
+
+@mixin resetList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+@mixin resetButton {
+	cursor: pointer;
+	background: transparent;
+	border: none;
+}
+
+/*mixin color-dark-mode */
+@mixin color-theme-dark-font-color {
+	@media (prefers-color-scheme: dark) {
+		color: white;
+	}
+}
+
+@mixin color-theme-dark-bg {
+	@media (prefers-color-scheme: dark) {
+		background-color: lighten(#262626, 10%);
+	}
+}
+
+@mixin color-theme-dark-button-hover-cover {
+	@media (prefers-color-scheme: dark) {
+		background-color: lighten(#262626, 10%);
+	}
+}

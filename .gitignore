@@ -1,0 +1,7 @@
+mysql-data2/
+.DS_Store
+.idea/
+www/Views/styles/src/css/main.css
+www/Views/styles/src/css/main.css.map
+vendor/
+node_modules/

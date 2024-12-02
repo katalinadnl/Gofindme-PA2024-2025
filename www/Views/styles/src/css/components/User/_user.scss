@@ -1,0 +1,58 @@
+.section1-user-table {
+  width: 100%;
+}
+
+.responsive-table {
+  text-align: center;
+  border-radius: rem(10);
+  border: none;
+}
+
+.responsive-th, .responsive-tb {
+  text-align: center;
+  border-radius: rem(10);
+}
+
+
+.adminCell {
+  border: none;
+  outline: none;
+}
+
+/* Styles pour le mode sombre */
+@media (prefers-color-scheme: dark) {
+    .section1-user-table {
+        background-color: #333;
+        color: var(--white);
+    }
+
+    .responsive-table, .responsive-th, .responsive-tb {
+        border-color: #555;
+    }
+
+    .responsive-table {
+        background-color: #222;
+    }
+
+    .responsive-th {
+        background-color: #444;
+    }
+
+    .link-primary {
+        color: var(--blue);
+    }
+
+    .link-danger {
+        color: var(--red);
+    }
+
+    .fa {
+        color: inherit;
+    }
+    tbody{
+      tr {
+        color: var(--black);
+      }
+    }
+
+}

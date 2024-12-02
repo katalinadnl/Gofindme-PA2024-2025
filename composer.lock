@@ -1,0 +1,66 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "d6cfaef0e053c79731790aaf58245cb7",
+    "packages": [
+        {
+            "name": "hansschouten/phpagebuilder",
+            "version": "v0.27.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/HansSchouten/PHPageBuilder.git",
+                "reference": "73de1109c77704cf5ce25fe7dc25f5888f8c265e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/HansSchouten/PHPageBuilder/zipball/73de1109c77704cf5ce25fe7dc25f5888f8c265e",
+                "reference": "73de1109c77704cf5ce25fe7dc25f5888f8c265e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Core/helpers.php"
+                ],
+                "psr-4": {
+                    "PHPageBuilder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hans Schouten",
+                    "email": "hans@falcosolutions.nl"
+                }
+            ],
+            "description": "A drag and drop pagebuilder to manage pages in any PHP project.",
+            "homepage": "https://github.com/HansSchouten/PHPagebuilder",
+            "keywords": [
+                "pagebuilder"
+            ],
+            "support": {
+                "issues": "https://github.com/HansSchouten/PHPageBuilder/issues",
+                "source": "https://github.com/HansSchouten/PHPageBuilder/tree/v0.27.0"
+            },
+            "time": "2023-09-21T11:45:28+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

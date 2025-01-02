@@ -2,14 +2,16 @@ version: '3'
 services:
   web:
     build: site
-    ports :
-     - "80:80"
+    ports:
+      - "80:80"
     volumes:
-     - ./www:/var/www/html/
-     - ./.env:/var/www/html/.env
-     - ./server/000-default.conf:/etc/apache2/sites-available/000-default.conf
-     - ./server/apache2.conf:/etc/apache2/apache2.conf
-     - ./server/php.ini:/usr/local/etc/php/php.ini
+      - ./www:/var/www/html/
+      - ./.env:/var/www/html/.env
+      - ./server/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./server/apache2.conf:/etc/apache2/apache2.conf
+      - ./server/php.ini:/usr/local/etc/php/php.ini
+    networks:
+      - app-network
 
   postgres:
     image: postgres
@@ -22,14 +24,31 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-
+    networks:
+      - app-network
 
   adminer:
     image: adminer
     restart: always
     ports:
       - "8080:8080"
+    networks:
+      - app-network
+
+  zap:
+    image: zaproxy/zap-stable
+    ports:
+      - "8081:8080"  # Webswing sur le port 8081
+      - "8091:8090"  # Proxy sur le port 8091
+    volumes:
+      - ./zap:/zap/wrk  # Volume pour les certificats et données ZAP
+    command: zap-webswing.sh
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

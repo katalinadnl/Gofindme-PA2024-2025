@@ -1,13 +1,17 @@
 #!/bin/bash
 
-# Créer un dossier pour les tests
 TEST_DIR="tests-vegeta"
-mkdir -p $TEST_DIR
 
-# Récupérer la date actuelle au format AAAAMMJJ
+if [[ ! -d $TEST_DIR ]]; then
+    echo "Le dossier $TEST_DIR n'existe pas. Création en cours..."
+    mkdir -p $TEST_DIR
+    echo "Dossier $TEST_DIR créé avec succès."
+else
+    echo "Le dossier $TEST_DIR existe déjà."
+fi
+
 CURRENT_DATE=$(date +%Y%m%d)
 
-# Demander à l'utilisateur de saisir l'URL
 read -p "Veuillez entrer l'URL à tester : " url
 
 # Vérifier que l'URL n'est pas vide

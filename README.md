@@ -25,6 +25,7 @@ Les documents relatifs au projet sont disponibles dans le dossier `doc-PA` :
 
 - **Rapport de l'audit** : `Audit.pdf`
 - **Améliorations du code-source** : `Ameliorations-du-code-source.pdf`
+- **Points bonus** : `Points bonus - Mise en place des tests.pdf`
 
 ## Points Bonus
 

@@ -1,0 +1,167 @@
+name: Trivy Security Scan Enhanced
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+
+concurrency:
+  group: trivy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  trivy-fs-scan:
+    name: Trivy - Scan du Filesystem
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v6
+
+      - name: Scan Trivy du code source (SARIF)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: trivy-fs-results.sarif
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH,MEDIUM
+
+      - name: Upload résultats vers GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: trivy-fs-results.sarif
+
+      - name: Scan Trivy avec rapport détaillé (table)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          exit-code: '1'
+          severity: CRITICAL,HIGH
+
+      - name: Génération rapport JSON pour analyse
+        uses: aquasecurity/trivy-action@0.33.1
+        if: always()
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: json
+          output: trivy-fs-results.json
+          severity: CRITICAL,HIGH,MEDIUM,LOW
+
+      - name: Upload artefacts JSON
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-fs-results
+          path: trivy-fs-results.json
+          retention-days: 30
+
+  trivy-config-scan:
+    name: Trivy - Scan de Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v6
+
+      - name: Scan Trivy des fichiers de config (SARIF)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: config
+          scan-ref: .
+          format: sarif
+          output: trivy-config-results.sarif
+          severity: CRITICAL,HIGH
+          skip-dirs: "www/Shared/tinymce,tests-vegeta,zap"
+
+      - name: Upload résultats vers GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: trivy-config-results.sarif
+
+      - name: Scan config avec rapport table
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: config
+          scan-ref: .
+          format: table
+          severity: CRITICAL,HIGH,MEDIUM
+          skip-dirs: "www/Shared/tinymce,tests-vegeta,zap"
+
+  trivy-secret-scan:
+    name: Trivy - Scan des Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Nécessaire pour scanner l'historique Git
+
+      - name: Scan Trivy des secrets (SARIF)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: secret
+          format: sarif
+          output: trivy-secret-results.sarif
+          severity: CRITICAL,HIGH,MEDIUM
+
+      - name: Upload résultats secrets vers GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: trivy-secret-results.sarif
+
+      - name: Rapport secrets en table
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: secret
+          format: table
+          exit-code: '1'
+          severity: CRITICAL,HIGH
+
+  trivy-image-scan:
+    name: Trivy - Scan d'Image Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v6
+
+      - name: Build de l'image Docker
+        run: docker build -t vulnerable-app:${{ github.sha }} -f site/Dockerfile ./site
+
+      - name: Scan Trivy de l'image Docker (SARIF)
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: image
+          image-ref: vulnerable-app:${{ github.sha }}
+          format: sarif
+          output: trivy-image-results.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Upload résultats image vers GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: trivy-image-results.sarif
+
+      - name: Scan image avec rapport détaillé
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          scan-type: image
+          image-ref: vulnerable-app:${{ github.sha }}
+          format: table
+          severity: CRITICAL,HIGH,MEDIUM
